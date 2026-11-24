@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nebula Engine</string>
+
+    <!-- Launcher hub -->
+    <string name="hub_tagline">Professional 2D Game Engine &amp; Editor for Android</string>
+    <string name="hub_subtitle">Kotlin × C++17 × OpenGL ES 3.0</string>
+    <string name="hub_card_game_title">NEBULA RUN</string>
+    <string name="hub_card_game_body">Pilot the flagship demo — steer with your finger, auto-fire is live. Survive the drone swarm and beat your best score.</string>
+    <string name="hub_card_editor_title">SCENE EDITOR</string>
+    <string name="hub_card_editor_body">Build your own world on-device: place sprites, add physics bodies, save scenes as portable JSON and playtest them instantly.</string>
+    <string name="hub_play">PLAY</string>
+    <string name="hub_open">OPEN EDITOR</string>
+    <string name="hub_footer">C++17 core · Sparse-set ECS · Impulse physics · GLES 3.0 batcher</string>
+    <string name="hub_version">Nebula Engine v1.0</string>
+
+    <!-- Game HUD -->
+    <string name="hud_score">SCORE</string>
+    <string name="hud_lives">LIVES</string>
+    <string name="hud_best">BEST</string>
+    <string name="game_over_title">GAME OVER</string>
+    <string name="game_over_subtitle">The swarm got you this time.</string>
+    <string name="retry">RETRY</string>
+    <string name="main_menu">MAIN MENU</string>
+    <string name="hud_hint">Drag to steer · auto-fire enabled</string>
+    <string name="sandbox_banner">SCENE PLAYTEST — physics is live</string>
+
+    <!-- Editor -->
+    <string name="editor_title">Scene Editor</string>
+    <string name="editor_add_sprite">Add Sprite</string>
+    <string name="editor_add_physics">Add Physics</string>
+    <string name="editor_duplicate">Duplicate</string>
+    <string name="editor_delete">Delete</string>
+    <string name="editor_save">Save</string>
+    <string name="editor_load">Load</string>
+    <string name="editor_play">Play</string>
+    <string name="editor_hierarchy">HIERARCHY</string>
+    <string name="editor_inspector">INSPECTOR</string>
+    <string name="editor_name">Name</string>
+    <string name="editor_tag">Tag</string>
+    <string name="editor_position">Position (world px)</string>
+    <string name="editor_scale">Scale</string>
+    <string name="editor_rotation">Rotation (°)</string>
+    <string name="editor_size">Sprite size (px)</string>
+    <string name="editor_zorder">Z-order</string>
+    <string name="editor_tint">Tint</string>
+    <string name="editor_physics_static">Static</string>
+    <string name="editor_physics_dynamic">Dynamic</string>
+    <string name="editor_remove_physics">Remove physics</string>
+    <string name="editor_debug">Debug draw</string>
+    <string name="editor_no_selection">No entity selected.\nTap any object in the viewport,\nor pick one from the hierarchy.</string>
+    <string name="editor_saved">Scene saved</string>
+    <string name="editor_loaded">Scene loaded</string>
+    <string name="editor_save_error">Save failed</string>
+    <string name="editor_load_error">No saved scene found</string>
+    <string name="editor_texture">Texture</string>
+
+    <string name="content_back">Back</string>
+</resources>

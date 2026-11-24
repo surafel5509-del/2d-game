@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="nebula_bg">#05060E</color>
+    <color name="nebula_panel">#0D1024</color>
+    <color name="nebula_panel_2">#141834</color>
+    <color name="nebula_stroke">#232850</color>
+    <color name="nebula_accent">#5EEAFF</color>
+    <color name="nebula_accent_2">#A06BFF</color>
+    <color name="nebula_amber">#FFD166</color>
+    <color name="nebula_danger">#FF5C7A</color>
+    <color name="nebula_text">#E8ECFF</color>
+    <color name="nebula_text_dim">#8A90B8</color>
+</resources>

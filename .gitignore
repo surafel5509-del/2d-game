@@ -1,0 +1,24 @@
+# Android / Gradle
+.gradle/
+.idea/
+*.iml
+local.properties
+build/
+app/build/
+.externalNativeBuild/
+.cxx/
+captures/
+.externalNativeBuild
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local tooling (never commit venvs / caches)
+.venv/
+__pycache__/
+*.pyc
+
+# Generated test binaries
+tests/bin/
