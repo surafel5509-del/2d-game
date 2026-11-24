@@ -28,3 +28,6 @@ keystore.properties
 *.jks
 *.keystore
 *.p12
+
+# Local build output
+dist/
