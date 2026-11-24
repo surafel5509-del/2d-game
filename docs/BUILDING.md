@@ -19,8 +19,8 @@ triggers `.github/workflows/android.yml`:
 1. `native-tests` — builds the C++17 engine on the host with `-Wall -Wextra` and
    runs the full native test suite (`scripts/run_native_tests.sh`).
 2. `apk` — installs Temurin JDK 17 + Android SDK 34 / build-tools 34.0.0 /
-   NDK 25.2.9519653 / CMake 3.22.1, generates the Gradle wrapper, then runs
-   `:app:assembleDebug` and `:app:assembleRelease`.
+   NDK 25.2.9519653 / CMake 3.22.1 + a pinned Gradle 8.4 distribution, then
+   runs `:app:assembleDebug` and `:app:assembleRelease`.
 
 The workflow uploads both APKs as the **`nebula-engine-apks`** workflow artifact
 (Actions → run → *Artifacts* → download → unzip). Tag releases additionally get

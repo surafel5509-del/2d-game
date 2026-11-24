@@ -64,14 +64,22 @@ jobs:
             "ndk;25.2.9519653" \
             "cmake;3.22.1"
 
-      - name: Generate Gradle wrapper 8.4
-        run: gradle wrapper --gradle-version 8.4 --distribution-type bin --no-daemon
+      # The runner image's preinstalled Gradle is not guaranteed to exist or be
+      # new enough for AGP 8.2 (requires Gradle >= 8.2), so install a pinned
+      # distribution directly instead of relying on it.
+      - name: Install Gradle 8.4
+        run: |
+          set -e
+          curl -fsSL https://services.gradle.org/distributions/gradle-8.4-bin.zip -o "$RUNNER_TEMP/gradle.zip"
+          unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/gradle-8.4/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/gradle-8.4/bin/gradle" --version
 
       - name: Build debug APK
-        run: ./gradlew --no-daemon --stacktrace :app:assembleDebug
+        run: gradle --no-daemon --stacktrace :app:assembleDebug
 
       - name: Build release APK
-        run: ./gradlew --no-daemon --stacktrace :app:assembleRelease
+        run: gradle --no-daemon --stacktrace :app:assembleRelease
 
       - name: Collect APKs
         run: |
