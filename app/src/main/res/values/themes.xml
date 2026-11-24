@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Nebula" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@color/nebula_bg</item>
+        <item name="colorPrimary">@color/nebula_accent</item>
+        <item name="colorPrimaryVariant">@color/nebula_accent_2</item>
+        <item name="colorSecondary">@color/nebula_accent_2</item>
+        <item name="colorOnPrimary">#05060E</item>
+        <item name="colorOnSecondary">#05060E</item>
+        <item name="colorSurface">@color/nebula_panel</item>
+        <item name="colorOnSurface">@color/nebula_text</item>
+        <item name="android:statusBarColor">@color/nebula_bg</item>
+        <item name="android:navigationBarColor">@color/nebula_bg</item>
+        <item name="android:textColorPrimary">@color/nebula_text</item>
+        <item name="android:textColorSecondary">@color/nebula_text_dim</item>
+        <item name="colorControlActivated">@color/nebula_accent</item>
+        <item name="rippleColor">#335EEAFF</item>
+    </style>
+</resources>

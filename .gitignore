@@ -1,0 +1,33 @@
+# Android / Gradle
+.gradle/
+.idea/
+*.iml
+local.properties
+build/
+app/build/
+.externalNativeBuild/
+.cxx/
+captures/
+.externalNativeBuild
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local tooling (never commit venvs / caches)
+.venv/
+__pycache__/
+*.pyc
+
+# Generated test binaries
+tests/bin/
+
+# Release signing (never commit keystores or credentials)
+keystore.properties
+*.jks
+*.keystore
+*.p12
+
+# Local build output
+dist/

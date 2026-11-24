@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/Theme.Nebula"
+        android:hardwareAccelerated="true"
+        android:allowBackup="true">
+
+        <!-- Launcher hub: choose the game or the scene editor -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Runtime for Nebula Run + scene playtests -->
+        <activity
+            android:name=".game.GameActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden" />
+
+        <!-- On-device 2D scene editor -->
+        <activity
+            android:name=".editor.EditorActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden" />
+
+    </application>
+</manifest>

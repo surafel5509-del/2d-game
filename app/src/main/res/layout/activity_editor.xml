@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/nebula_bg">
+
+    <!-- ══════════ TOOLBAR ══════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/nebula_panel"
+        android:paddingStart="10dp" android:paddingEnd="10dp">
+
+        <ImageButton
+            android:id="@+id/btnEditorBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_ghost_circle"
+            android:src="@drawable/ic_close"
+            android:contentDescription="@string/content_back"
+            android:padding="9dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="SCENE EDITOR"
+            android:textColor="@color/nebula_accent_2"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.22" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="0dp" />
+
+        <ImageButton
+            android:id="@+id/btnAddSprite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/bg_button_ghost"
+            android:src="@drawable/ic_add"
+            android:tint="@color/nebula_accent"
+            android:contentDescription="@string/editor_add_sprite"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btnAddPhysics"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/bg_button_ghost"
+            android:src="@drawable/ic_physics"
+            android:tint="@color/nebula_amber"
+            android:contentDescription="@string/editor_add_physics"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btnDuplicate"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/bg_button_ghost"
+            android:src="@drawable/ic_duplicate"
+            android:contentDescription="@string/editor_duplicate"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_button_ghost"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/nebula_danger"
+            android:contentDescription="@string/editor_delete"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btnSave"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/bg_button_ghost"
+            android:src="@drawable/ic_save"
+            android:contentDescription="@string/editor_save"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btnLoad"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_button_ghost"
+            android:src="@drawable/ic_load"
+            android:contentDescription="@string/editor_load"
+            android:padding="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlay"
+            android:layout_width="96dp"
+            android:layout_height="38dp"
+            android:text="@string/editor_play"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:letterSpacing="0.2"
+            app:backgroundTint="@color/nebula_accent"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_play_dark"
+            app:iconGravity="textStart" />
+    </LinearLayout>
+
+    <!-- ══════════ WORKSPACE ══════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- ── Hierarchy panel ── -->
+        <LinearLayout
+            android:layout_width="132dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/nebula_panel">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp" android:paddingEnd="12dp"
+                android:text="@string/editor_hierarchy"
+                android:textColor="@color/nebula_text_dim"
+                android:textSize="10sp"
+                android:letterSpacing="0.2"
+                android:background="@color/nebula_panel_2" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHierarchy"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="6dp"
+                android:clipToPadding="false" />
+        </LinearLayout>
+
+        <!-- ── Viewport ── -->
+        <com.nebula.engine.EngineView
+            android:id="@+id/editorViewport"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+        <!-- ── Inspector panel ── -->
+        <ScrollView
+            android:layout_width="176dp"
+            android:layout_height="match_parent"
+            android:background="@color/nebula_panel"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/editor_inspector"
+                    android:textColor="@color/nebula_text_dim"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.2" />
+
+                <!-- Empty state -->
+                <TextView
+                    android:id="@+id/tvNoSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    android:padding="12dp"
+                    android:text="@string/editor_no_selection"
+                    android:textColor="@color/nebula_text_dim"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp" />
+
+                <!-- Editor body (hidden until selection) -->
+                <LinearLayout
+                    android:id="@+id/inspectorBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_name" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <EditText
+                        android:id="@+id/etName"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:singleLine="true"
+                        android:textSize="12sp"
+                        android:textColor="@color/nebula_text"
+                        android:background="@drawable/bg_button_ghost"
+                        android:paddingStart="8dp" android:paddingEnd="8dp"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_tag" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <EditText
+                        android:id="@+id/etTag"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:singleLine="true"
+                        android:hint="e.g. player, enemy"
+                        android:textSize="12sp"
+                        android:textColor="@color/nebula_text"
+                        android:background="@drawable/bg_button_ghost"
+                        android:paddingStart="8dp" android:paddingEnd="8dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/nebula_stroke" android:layout_marginBottom="8dp" />
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_position" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <EditText android:id="@+id/etPosX" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:layout_marginEnd="4dp" android:singleLine="true" android:inputType="numberSigned|numberDecimal" android:textSize="12sp" android:textColor="@color/nebula_text" android:background="@drawable/bg_button_ghost" android:paddingStart="8dp" android:paddingEnd="8dp" />
+                        <EditText android:id="@+id/etPosY" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:singleLine="true" android:inputType="numberSigned|numberDecimal" android:textSize="12sp" android:textColor="@color/nebula_text" android:background="@drawable/bg_button_ghost" android:paddingStart="8dp" android:paddingEnd="8dp" />
+                    </LinearLayout>
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_scale" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <EditText android:id="@+id/etScaleX" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:layout_marginEnd="4dp" android:singleLine="true" android:inputType="numberDecimal|numberSigned" android:textSize="12sp" android:textColor="@color/nebula_text" android:background="@drawable/bg_button_ghost" android:paddingStart="8dp" android:paddingEnd="8dp" />
+                        <EditText android:id="@+id/etScaleY" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:singleLine="true" android:inputType="numberDecimal|numberSigned" android:textSize="12sp" android:textColor="@color/nebula_text" android:background="@drawable/bg_button_ghost" android:paddingStart="8dp" android:paddingEnd="8dp" />
+                    </LinearLayout>
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_rotation" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <EditText
+                        android:id="@+id/etRotation"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:singleLine="true"
+                        android:inputType="numberDecimal|numberSigned"
+                        android:textSize="12sp"
+                        android:textColor="@color/nebula_text"
+                        android:background="@drawable/bg_button_ghost"
+                        android:paddingStart="8dp" android:paddingEnd="8dp"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_size" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <EditText android:id="@+id/etSizeW" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:layout_marginEnd="4dp" android:singleLine="true" android:inputType="numberDecimal" android:textSize="12sp" android:textColor="@color/nebula_text" android:background="@drawable/bg_button_ghost" android:paddingStart="8dp" android:paddingEnd="8dp" />
+                        <EditText android:id="@+id/etSizeH" android:layout_width="0dp" android:layout_weight="1" android:layout_height="36dp" android:singleLine="true" android:inputType="numberDecimal" android:textSize="12sp" android:textColor="@color/nebula_text" android:background="@drawable/bg_button_ghost" android:paddingStart="8dp" android:paddingEnd="8dp" />
+                    </LinearLayout>
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_zorder" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <EditText
+                        android:id="@+id/etZOrder"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:singleLine="true"
+                        android:inputType="numberDecimal|numberSigned"
+                        android:textSize="12sp"
+                        android:textColor="@color/nebula_text"
+                        android:background="@drawable/bg_button_ghost"
+                        android:paddingStart="8dp" android:paddingEnd="8dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/editor_tint" android:textColor="@color/nebula_text_dim" android:textSize="10sp" />
+                    <SeekBar android:id="@+id/sbTintR" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255" android:progress="255" />
+                    <SeekBar android:id="@+id/sbTintG" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255" android:progress="255" />
+                    <SeekBar android:id="@+id/sbTintB" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255" android:progress="255" />
+                    <SeekBar android:id="@+id/sbTintA" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255" android:progress="255" android:layout_marginBottom="8dp" />
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/nebula_stroke" android:layout_marginBottom="8dp" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPhysicsDynamic"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="36dp"
+                            android:layout_marginEnd="4dp"
+                            android:text="@string/editor_physics_dynamic"
+                            android:textSize="10sp"
+                            app:strokeColor="@color/nebula_amber"
+                            app:strokeWidth="1dp"
+                            app:backgroundTint="#1A241F10"
+                            app:cornerRadius="8dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPhysicsStatic"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="36dp"
+                            android:text="@string/editor_physics_static"
+                            android:textSize="10sp"
+                            app:strokeColor="@color/nebula_accent"
+                            app:strokeWidth="1dp"
+                            app:backgroundTint="#101E241F"
+                            app:cornerRadius="8dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRemovePhysics"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:text="@string/editor_remove_physics"
+                        android:textSize="10sp"
+                        android:textColor="@color/nebula_danger"
+                        app:backgroundTint="#1A2B1420"
+                        app:cornerRadius="8dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- ══════════ STATUS BAR ══════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/nebula_panel_2"
+        android:paddingStart="12dp" android:paddingEnd="12dp">
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="FPS — · Draws — · Entities —"
+            android:textColor="@color/nebula_text_dim"
+            android:textSize="9sp"
+            android:fontFeatureSettings="tnum"
+            android:singleLine="true" />
+        <Switch
+            android:id="@+id/switchDebug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editor_debug"
+            android:textColor="@color/nebula_text_dim"
+            android:textSize="9sp"
+            android:showText="false" />
+    </LinearLayout>
+</LinearLayout>

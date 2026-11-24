@@ -1,0 +1,157 @@
+name: android-ci
+
+on:
+  push:
+    branches: ['arena/36e85c2a-2d-game', 'main']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native-tests:
+    name: Native host tests (C++ engine)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends g++ make
+      - name: Run native test suite
+        run: ./scripts/run_native_tests.sh
+
+  apk:
+    name: Android APK (debug + release)
+    runs-on: ubuntu-latest
+    needs: native-tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Locate sdkmanager
+        id: sdk
+        run: |
+          set -e
+          if command -v sdkmanager >/dev/null 2>&1; then
+            echo "bin=$(command -v sdkmanager)" >> "$GITHUB_OUTPUT"
+          else
+            BIN="$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | sort -V | tail -n1)"
+            test -x "$BIN"
+            echo "bin=$BIN" >> "$GITHUB_OUTPUT"
+          fi
+          echo "ANDROID_HOME=$ANDROID_HOME"
+
+      - name: Accept licenses & install SDK packages
+        run: |
+          set -e
+          yes | "${{ steps.sdk.outputs.bin }}" --licenses >/dev/null 2>&1 || true
+          "${{ steps.sdk.outputs.bin }}" --install \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "platform-tools" \
+            "ndk;25.2.9519653" \
+            "cmake;3.22.1"
+
+      # The runner image's preinstalled Gradle is not guaranteed to exist or be
+      # new enough for AGP 8.2 (requires Gradle >= 8.2), so install a pinned
+      # distribution directly instead of relying on it.
+      - name: Install Gradle 8.4
+        run: |
+          set -e
+          curl -fsSL https://services.gradle.org/distributions/gradle-8.4-bin.zip -o "$RUNNER_TEMP/gradle.zip"
+          unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/gradle-8.4/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/gradle-8.4/bin/gradle" --version
+
+      # On failure, re-emit the Gradle FAILURE block as a workflow annotation —
+      # the raw job log is not reachable from some environments.
+      - name: Build debug APK
+        run: |
+          set -o pipefail
+          if ! gradle --no-daemon --stacktrace :app:assembleDebug 2>&1 | tee build-debug.log; then
+            python3 - <<'PY'
+          import re
+          log = open('build-debug.log', errors='ignore').read()
+          m = re.search(r'FAILURE:.*', log, re.S)
+          msg = (m.group(0) if m else log[-3000:])[:3000]
+          msg = msg.replace('%', '%25').replace('\r', '').replace('\n', '%0A')
+          print(f'::error file=build-debug.log::{msg}')
+          PY
+            exit 1
+          fi
+
+      - name: Build release APK
+        run: |
+          set -o pipefail
+          if ! gradle --no-daemon --stacktrace :app:assembleRelease 2>&1 | tee build-release.log; then
+            python3 - <<'PY'
+          import re
+          log = open('build-release.log', errors='ignore').read()
+          m = re.search(r'FAILURE:.*', log, re.S)
+          msg = (m.group(0) if m else log[-3000:])[:3000]
+          msg = msg.replace('%', '%25').replace('\r', '').replace('\n', '%0A')
+          print(f'::error file=build-release.log::{msg}')
+          PY
+            exit 1
+          fi
+
+      - name: Collect APKs
+        run: |
+          set -e
+          mkdir -p dist
+          find app/build/outputs/apk -name '*.apk' -exec cp -v {} dist/ \;
+          ls -la dist/
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nebula-engine-apks
+          path: dist/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Attach APKs to GitHub Release
+    runs-on: ubuntu-latest
+    needs: apk
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: nebula-engine-apks
+          path: dist
+      - name: Rename APKs with version tag
+        run: |
+          set -e
+          cd dist
+          TAG="${GITHUB_REF_NAME}"
+          for f in *.apk; do
+            mv "$f" "nebula-engine-${TAG}-${f}"
+          done
+          ls -la
+      - name: Create release & upload APKs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="${GITHUB_REF_NAME}"
+          gh release view "$TAG" >/dev/null 2>&1 || \
+            gh release create "$TAG" \
+              --title "Nebula Engine ${TAG}" \
+              --notes "Nebula Engine ${TAG} — release tooling + CI-built APKs. See CHANGELOG.md and docs/BUILDING.md. Debug APK installs with USB debugging; the release APK is unsigned (no upload keystore configured) — sign with apksigner or build locally with keystore.properties (see docs/BUILDING.md)."
+          gh release upload "$TAG" dist/*.apk --clobber

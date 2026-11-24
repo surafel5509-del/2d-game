@@ -1,0 +1,116 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+// Release signing is optional and never committed to git.
+// Provide either a `keystore.properties` file at the repo root (git-ignored):
+//     storeFile=path/to/nebula-release.jks
+//     storePassword=...
+//     keyAlias=...
+//     keyPassword=...
+// or environment variables: NEBULA_KEYSTORE_PATH, NEBULA_KEYSTORE_PASSWORD,
+// NEBULA_KEY_ALIAS, NEBULA_KEY_PASSWORD. Without either, the release build
+// is produced unsigned (installable via `zipalign`/`apksigner` afterwards,
+// or use the debug build for local testing).
+def keystoreProps = new Properties()
+def keystorePropsFile = rootProject.file('keystore.properties')
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
+def pick = { String propName, String envName ->
+    def v = keystoreProps.getProperty(propName)
+    (v != null && !v.trim().isEmpty()) ? v.trim() : System.getenv(envName)
+}
+def storeFilePath = pick('storeFile', 'NEBULA_KEYSTORE_PATH')
+def hasReleaseSigning = storeFilePath != null && !storeFilePath.isEmpty() &&
+        pick('storePassword', 'NEBULA_KEYSTORE_PASSWORD') != null &&
+        pick('keyAlias', 'NEBULA_KEY_ALIAS') != null &&
+        pick('keyPassword', 'NEBULA_KEY_PASSWORD') != null
+
+android {
+    namespace 'com.nebula.engine'
+    compileSdk 34
+
+    if (hasReleaseSigning) {
+        signingConfigs {
+            release {
+                storeFile rootProject.file(storeFilePath)
+                storePassword pick('storePassword', 'NEBULA_KEYSTORE_PASSWORD')
+                keyAlias pick('keyAlias', 'NEBULA_KEY_ALIAS')
+                keyPassword pick('keyPassword', 'NEBULA_KEY_PASSWORD')
+            }
+        }
+    }
+
+    // Pinned to the NDK installed by CI / docs (sdkmanager "ndk;25.2.9519653").
+    ndkVersion '25.2.9519653'
+
+    defaultConfig {
+        applicationId 'com.nebula.engine'
+        minSdk 24
+        targetSdk 34
+        versionCode 2
+        versionName '1.1.0'
+
+        // Native engine (C++17 / GLES 3.0)
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+        externalNativeBuild {
+            cmake {
+                cppFlags '-std=c++17 -O3'
+                arguments '-DANDROID_STL=c++_shared', '-DANDROID_PLATFORM=android-24'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    buildFeatures {
+        viewBinding false
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            // Pinned to the version shipped with recent Android SDKs / NDK r25+.
+            // Delete this line to use the default CMake from your SDK.
+            version '3.22.1'
+        }
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging false
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.22'
+}
