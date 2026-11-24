@@ -1,3 +1,8 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
 // Release signing is optional and never committed to git.
 // Provide either a `keystore.properties` file at the repo root (git-ignored):
 //     storeFile=path/to/nebula-release.jks
@@ -22,11 +27,6 @@ def hasReleaseSigning = storeFilePath != null && !storeFilePath.isEmpty() &&
         pick('storePassword', 'NEBULA_KEYSTORE_PASSWORD') != null &&
         pick('keyAlias', 'NEBULA_KEY_ALIAS') != null &&
         pick('keyPassword', 'NEBULA_KEY_PASSWORD') != null
-
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-}
 
 android {
     namespace 'com.nebula.engine'
