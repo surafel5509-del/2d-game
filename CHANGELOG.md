@@ -29,9 +29,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · Versioning: 
 ### Verified
 - Native C++ engine suite: **24/24 tests pass** (`./scripts/run_native_tests.sh`),
   ASan/UBSan clean (`./scripts/run_sanitizer_tests.sh`).
-- Android Gradle/Kotlin toolchain verified by CI (see Actions tab) — the
-  authoring sandbox has no Android SDK, so on-device behavior is not yet
-  machine-verified.
+- **android-ci run 45475094827: SUCCESS** — both `:app:assembleDebug` and
+  `:app:assembleRelease` build on the hosted runner; APKs published as the
+  `nebula-engine-apks` artifact and attached to tagged GitHub Releases.
+- On-device behavior has not been machine-verified yet — first physical run
+  may need minor fixes.
 
 ## [1.0.0] — 2026-11-24 · Initial release
 
