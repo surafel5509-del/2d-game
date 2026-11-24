@@ -43,6 +43,9 @@ android {
         }
     }
 
+    // Pinned to the NDK installed by CI / docs (sdkmanager "ndk;25.2.9519653").
+    ndkVersion '25.2.9519653'
+
     defaultConfig {
         applicationId 'com.nebula.engine'
         minSdk 24

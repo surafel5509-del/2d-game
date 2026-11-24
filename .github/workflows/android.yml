@@ -75,11 +75,37 @@ jobs:
           echo "$RUNNER_TEMP/gradle-8.4/bin" >> "$GITHUB_PATH"
           "$RUNNER_TEMP/gradle-8.4/bin/gradle" --version
 
+      # On failure, re-emit the Gradle FAILURE block as a workflow annotation —
+      # the raw job log is not reachable from some environments.
       - name: Build debug APK
-        run: gradle --no-daemon --stacktrace :app:assembleDebug
+        run: |
+          set -o pipefail
+          if ! gradle --no-daemon --stacktrace :app:assembleDebug 2>&1 | tee build-debug.log; then
+            python3 - <<'PY'
+          import re
+          log = open('build-debug.log', errors='ignore').read()
+          m = re.search(r'FAILURE:.*', log, re.S)
+          msg = (m.group(0) if m else log[-3000:])[:3000]
+          msg = msg.replace('%', '%25').replace('\r', '').replace('\n', '%0A')
+          print(f'::error file=build-debug.log::{msg}')
+          PY
+            exit 1
+          fi
 
       - name: Build release APK
-        run: gradle --no-daemon --stacktrace :app:assembleRelease
+        run: |
+          set -o pipefail
+          if ! gradle --no-daemon --stacktrace :app:assembleRelease 2>&1 | tee build-release.log; then
+            python3 - <<'PY'
+          import re
+          log = open('build-release.log', errors='ignore').read()
+          m = re.search(r'FAILURE:.*', log, re.S)
+          msg = (m.group(0) if m else log[-3000:])[:3000]
+          msg = msg.replace('%', '%25').replace('\r', '').replace('\n', '%0A')
+          print(f'::error file=build-release.log::{msg}')
+          PY
+            exit 1
+          fi
 
       - name: Collect APKs
         run: |
