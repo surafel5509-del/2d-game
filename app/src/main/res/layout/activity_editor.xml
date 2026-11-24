@@ -290,8 +290,8 @@
                             app:strokeWidth="1dp"
                             app:backgroundTint="#1A241F10"
                             app:cornerRadius="8dp"
-                            app:insetTop="0dp"
-                            app:insetBottom="0dp" />
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnPhysicsStatic"
                             android:layout_width="0dp"
@@ -303,8 +303,8 @@
                             app:strokeWidth="1dp"
                             app:backgroundTint="#101E241F"
                             app:cornerRadius="8dp"
-                            app:insetTop="0dp"
-                            app:insetBottom="0dp" />
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -316,8 +316,8 @@
                         android:textColor="@color/nebula_danger"
                         app:backgroundTint="#1A2B1420"
                         app:cornerRadius="8dp"
-                        app:insetTop="0dp"
-                        app:insetBottom="0dp" />
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
