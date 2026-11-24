@@ -126,6 +126,20 @@ layer as "build with Studio" — the native core is machine-checked.
   ... 23 tests run, 0 failed
 ```
 
+## 📸 Previews (mock frames composed from the in-repo assets)
+
+<p align="center">
+  <img src="docs/preview-gameplay.png" width="270" alt="Nebula Run gameplay frame" />
+  &nbsp;&nbsp;
+  <img src="docs/preview-editor.png" width="480" alt="On-device scene editor" />
+</p>
+
+Left: **Nebula Run** in action — SCORE/LIVES HUD, finger-steered ship, auto-fired
+energy bolts, trigger-collision explosions (C++ particle system). Right: the
+**on-device Scene Editor** — hierarchy, GLES viewport with adaptive grid & origin
+axes, amber selection gizmo with corner handles, full inspector and the status bar.
+Both are static mockups built with the same sprites/colors the engine renders.
+
 ## 🎮 Controls
 
 **Nebula Run** — drag anywhere to steer; weapons fire automatically; avoid or destroy the drones.
