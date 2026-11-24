@@ -10,7 +10,9 @@
 </p>
 
 <p align="center">
-  <code>Kotlin</code> · <code>C++17</code> · <code>OpenGL ES 3.0</code> · <code>Android NDK</code> · <code>Sparse-set ECS</code> · <code>GLES batcher</code>
+  <code>Kotlin</code> · <code>C++17</code> · <code>OpenGL ES 3.0</code> · <code>Android NDK</code> · <code>Sparse-set ECS</code> · <code>GLES batcher</code><br/>
+  <a href="https://github.com/surafel5509-del/2d-game/actions/workflows/android.yml"><img src="https://github.com/surafel5509-del/2d-game/actions/workflows/android.yml/badge.svg" alt="android-ci" /></a>
+  <img alt="version" src="https://img.shields.io/badge/version-1.1.0-brightgreen" />
 </p>
 
 ---
@@ -93,24 +95,31 @@ itself — is implemented in this repository. It ships three things in one app:
 
 ## 🚀 Build & run (Android)
 
-**Requirements:** Android Studio Hedgehog+ · JDK 17 · Android SDK 34 · NDK 25+ · CMake 3.22.1
+Three supported routes — full walkthrough in **[docs/BUILDING.md](docs/BUILDING.md)**:
+
+**A. CI (zero local setup)** — every push builds both APKs; download the
+`nebula-engine-apks` artifact from the Actions tab, or tag `v*` to attach it to a release.
+
+**B. Android Studio** — *File → Open…* → this repo → accept the SDK/NDK prompt → *Run ▶*.
+
+**C. Command line** —
 
 ```bash
-# 1) Open the project in Android Studio (File → Open → this repo)
-#    Studio installs the NDK/CMake automatically if missing.
-# 2) Or from the command line with a configured SDK:
-./gradlew :app:assembleDebug          # → app/build/outputs/apk/debug/app-debug.apk
-./gradlew :app:installDebug           # installs on a connected device/emulator
+./scripts/build_apk.sh           # debug APK   → app/build/outputs/apk/debug/app-debug.apk
+./scripts/build_apk.sh release   # release APK (signs automatically if keystore is configured)
 ```
 
-> The Gradle wrapper jar is not vendored (binary artifact). Android Studio
-> regenerates it on first open, or run `gradle wrapper --gradle-version 8.4`
-> with a local Gradle 8.4+.
+**Requirements:** JDK 17 · Android SDK 34 · build-tools 34.0.0 · NDK 25.2.9519653 · CMake 3.22.1
 
-**Verified here on CI:** all engine C++ compiles with `-Wall -Wextra` and the full
-test suite passes on a host toolchain. The Android APK build itself requires the
-Android SDK (not available in this authoring sandbox), so treat the Kotlin/Gradle
-layer as "build with Studio" — the native core is machine-checked.
+> The Gradle wrapper jar is not vendored (binary artifact). Studio regenerates it
+> on first open, or run `gradle wrapper --gradle-version 8.4`. Release signing is
+> optional and git-ignored — see [docs/BUILDING.md](docs/BUILDING.md#signing-the-release-build-optional).
+
+**Verification status:** the C++17 engine compiles with `-Wall -Wextra` and the full
+test suite (**24 tests**) passes on the host toolchain (see below; sanitizer-clean).
+The Android Gradle/Kotlin layer is built by CI (`.github/workflows/android.yml`);
+APKs from CI are the authoritative installable artifacts. On-device behavior has
+not been machine-verified yet — first physical run may need minor fixes.
 
 ## 🧪 Run the engine tests (host, no device/emulator needed)
 
@@ -123,7 +132,7 @@ layer as "build with Studio" — the native core is machine-checked.
   [PASS] physics_box_rests_on_static_floor
   [PASS] physics_trigger_fires_enter_exit_events
   [PASS] scene_serialize_deserialize_roundtrip
-  ... 23 tests run, 0 failed
+  ... 24 tests run, 0 failed
 ```
 
 ## 📸 Previews (mock frames composed from the in-repo assets)
@@ -179,6 +188,7 @@ Textures are stored by **logical name**, never by GL id — scene files are port
 - [ ] Vulkan backend behind the `IRenderer` seam
 - [ ] Prefab system & nested scenes
 - [ ] Undo/redo stack in the editor (command pattern)
+- [x] CI-built APKs (GitHub Actions: native tests + assembleDebug/Release)
 - [ ] Export-to-APK from within the editor (template project + Gradle)
 
 ## 📄 License & authorship

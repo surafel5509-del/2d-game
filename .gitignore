@@ -22,3 +22,9 @@ __pycache__/
 
 # Generated test binaries
 tests/bin/
+
+# Release signing (never commit keystores or credentials)
+keystore.properties
+*.jks
+*.keystore
+*.p12
