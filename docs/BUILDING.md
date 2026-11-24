@@ -23,8 +23,12 @@ triggers `.github/workflows/android.yml`:
    runs `:app:assembleDebug` and `:app:assembleRelease`.
 
 The workflow uploads both APKs as the **`nebula-engine-apks`** workflow artifact
-(Actions → run → *Artifacts* → download → unzip). Tag releases additionally get
-the APK attached to a GitHub Release.
+(Actions → run → *Artifacts* → download → unzip). Tag releases (`v*`) additionally
+attach both APKs to the [GitHub Release](https://github.com/surafel5509-del/2d-game/releases)
+— e.g. [v1.1.0](https://github.com/surafel5509-del/2d-game/releases/tag/v1.1.0).
+Note: artifact and log downloads from Azure blob storage are reachable from a
+browser but may be blocked from some sandboxed environments — the Release page is
+the most reliable distribution channel.
 
 To build on your own fork: push the repo, open the **Actions** tab, select
 `android-ci` → *Run workflow*.

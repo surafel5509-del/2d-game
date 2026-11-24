@@ -97,6 +97,10 @@ itself — is implemented in this repository. It ships three things in one app:
 
 Three supported routes — full walkthrough in **[docs/BUILDING.md](docs/BUILDING.md)**:
 
+**⬇ Prebuilt APKs** — [v1.1.0 Release](https://github.com/surafel5509-del/2d-game/releases/tag/v1.1.0):
+`nebula-engine-v1.1.0-app-debug.apk` (installs directly with USB debugging) and
+`nebula-engine-v1.1.0-app-release-unsigned.apk` (R8-shrunk; sign per BUILDING.md).
+
 **A. CI (zero local setup)** — every push builds both APKs; download the
 `nebula-engine-apks` artifact from the Actions tab, or tag `v*` to attach it to a release.
 
